@@ -280,7 +280,7 @@ Open **`http://localhost:8000`** in your browser.
         <br /><b>Prachi Garg</b>
       </a>
       <br />
-      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(6,182,212,0.15); color:#06b6d4; font-weight:600;">👑 Project Lead & Principal ML Architect</span>
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(6,182,212,0.15); color:#06b6d4; font-weight:600;"> Project Lead & Principal ML Architect</span>
       <br />
       <a href="https://github.com/prachigarg1511"><code>@prachigarg1511</code></a>
       <br /><br />
@@ -310,6 +310,23 @@ Open **`http://localhost:8000`** in your browser.
       </div>
     </td>
     <td align="center" width="25%" valign="top">
+      <a href="https://github.com/sanchi2559">
+        <img src="https://github.com/sanchi2559.png?size=140" width="95px;" alt="Sanchi Katyal" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
+        <br /><b>Sanchi Katyal</b>
+      </a>
+      <br />
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Research & Documentation Specialist</span>
+      <br />
+      <a href="https://github.com/sanchi2559"><code>@sanchi2559</code></a>
+      <br /><br />
+      <div align="left" style="font-size:0.78rem; line-height:1.4;">
+        • Academic paper compilation & research manuscript editing<br/>
+        • Project synopsis preparation & thesis alignment<br/>
+        • Comprehensive project reporting and documentation<br/>
+        • Viva-voce guide contribution and content review
+      </div>
+    </td>
+    <td align="center" width="25%" valign="top">
       <a href="https://github.com/parvsharma1892007-ai">
         <img src="https://github.com/parvsharma1892007-ai.png?size=140" width="95px;" alt="Parv Sharma" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
         <br /><b>Parv Sharma</b>
@@ -324,23 +341,6 @@ Open **`http://localhost:8000`** in your browser.
         • Project synopsis creation & academic report structuring<br/>
         • Rural policy context & MGNREGA governance synthesis<br/>
         • Technical documentation and academic formatting
-      </div>
-    </td>
-    <td align="center" width="25%" valign="top">
-      <a href="https://github.com/sanchi2559">
-        <img src="https://github.com/sanchi2559.png?size=140" width="95px;" alt="Sanchi" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
-        <br /><b>Sanchi</b>
-      </a>
-      <br />
-      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Research & Documentation Specialist</span>
-      <br />
-      <a href="https://github.com/sanchi2559"><code>@sanchi2559</code></a>
-      <br /><br />
-      <div align="left" style="font-size:0.78rem; line-height:1.4;">
-        • Academic paper compilation & research manuscript editing<br/>
-        • Project synopsis preparation & thesis alignment<br/>
-        • Comprehensive project reporting and documentation<br/>
-        • Viva-voce guide contribution and content review
       </div>
     </td>
   </tr>
