@@ -315,12 +315,13 @@ Open **`http://localhost:8000`** in your browser.
         <br /><b>Sanchi Katyal</b>
       </a>
       <br />
-      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(236,72,153,0.15); color:#f472b6; font-weight:600;">📄 Academic Research & Manuscript Specialist</span>
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(236,72,153,0.15); color:#f472b6; font-weight:600;">📄 Dataset Research & Manuscript Specialist</span>
       <br />
       <a href="https://github.com/sanchi2559"><code>@sanchi2559</code></a>
       <br /><br />
       <div align="left" style="font-size:0.78rem; line-height:1.4;">
         • Research paper manuscript drafting & scholarly structuring<br/>
+        • Dataset research, source exploration & portal documentation<br/>
         • Project synopsis authoring & methodology alignment<br/>
         • Comprehensive academic report compilation & synthesis<br/>
         • Viva-voce guide development & editorial review
