@@ -2,6 +2,7 @@
 
 <p align="center">
   <a href="https://explainablemlfordistrictlevelemp.netlify.app/" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Live Demo" /></a>
+  <a href="./Explainable_ML_MGNREGA_Research_Paper.pdf" target="_blank"><img src="https://img.shields.io/badge/Research%20Paper-PDF%20Manuscript-E11D48?style=for-the-badge&logo=adobeacrobatreader&logoColor=white" alt="Research Paper PDF" /></a>
   <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Version" />
   <img src="https://img.shields.io/badge/Coverage-745%20Districts-success?style=for-the-badge&logo=googlemaps&logoColor=white" alt="Districts Covered" />
   <img src="https://img.shields.io/badge/States%20%26%20UTs-34-orange?style=for-the-badge" alt="States Covered" />
@@ -16,6 +17,8 @@
 
 <p align="center">
   <a href="https://explainablemlfordistrictlevelemp.netlify.app/" target="_blank"><b>🌐 Live Dashboard (Netlify)</b></a> •
+  <a href="./research_paper.md"><b>📄 Research Paper (Markdown)</b></a> •
+  <a href="./Explainable_ML_MGNREGA_Research_Paper.pdf"><b>📑 Research Paper (PDF)</b></a> •
   <a href="#-key-highlights--innovations">Key Highlights</a> •
   <a href="#-data-architecture--5-pillar-fusion">Data Fusion</a> •
   <a href="#-machine-learning-benchmarks">Model Benchmarks</a> •
@@ -217,7 +220,8 @@ ExplainableMLForDistrictLevelRuralEmpMGNREGA/
 │   ├── download_and_curate_real_datasets.py                     # Ingestion pipeline from public portals
 │   ├── build_real_district_panel.py                             # Multi-pillar LGD harmonization script
 │   ├── train_and_evaluate_models.py                             # ML training, quantiles, XAI, and evaluation
-│   └── generate_viva_pdf.py                                     # Academic viva-voce PDF report generator
+│   ├── generate_viva_pdf.py                                     # Academic viva-voce PDF report generator
+│   └── generate_research_paper_pdf.py                           # Full academic research paper PDF generator
 │
 ├── web/                                                         # Interactive Decision Support System
 │   ├── index.html
@@ -226,6 +230,8 @@ ExplainableMLForDistrictLevelRuralEmpMGNREGA/
 │   └── data/
 │       └── models_data.json
 │
+├── research_paper.md                                            # Complete academic research paper (IEEE/ACM style)
+├── Explainable_ML_MGNREGA_Research_Paper.pdf                    # Publication-grade research paper PDF
 ├── datasets_inventory_and_pipeline.md                           # Research blueprint & variable dictionary
 ├── MGNREGA_ML_Project_Viva_Voce_Comprehensive_Guide.pdf         # Comprehensive viva-voce defense manual
 ├── mgnrega-web-deploy.zip                                       # Portable deployment archive
