@@ -22,6 +22,7 @@
   <a href="#-explainable-ai-xai--policy-signals">Explainability</a> •
   <a href="#-cross-region-transferability-experiment">Spatial Transferability</a> •
   <a href="#-interactive-web-decision-support-system">Web Dashboard</a> •
+  <a href="#-team--contributors">Team</a> •
   <a href="#-quickstart--reproduction">Quickstart</a>
 </p>
 
@@ -266,6 +267,84 @@ cd web
 python -m http.server 8000
 ```
 Open **`http://localhost:8000`** in your browser.
+
+---
+
+## 👥 Research & Development Team
+
+<table align="center" width="100%">
+  <tr>
+    <td align="center" width="25%" valign="top">
+      <a href="https://github.com/prachigarg1511">
+        <img src="https://github.com/prachigarg1511.png?size=140" width="95px;" alt="Prachi Garg" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
+        <br /><b>Prachi Garg</b>
+      </a>
+      <br />
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(6,182,212,0.15); color:#06b6d4; font-weight:600;">👑 Project Lead & Principal ML Architect</span>
+      <br />
+      <a href="https://github.com/prachigarg1511"><code>@prachigarg1511</code></a>
+      <br /><br />
+      <div align="left" style="font-size:0.78rem; line-height:1.4;">
+        • Overarching system architecture & research direction<br/>
+        • End-to-end ML modeling (Quantile GBR, RF, XAI forces)<br/>
+        • 5-Pillar multimodal data fusion & LGD harmonization<br/>
+        • Cross-regional transferability experiment (GAP 15)<br/>
+        • Interactive Web Decision Support System & Netlify deployment
+      </div>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <a href="https://github.com/Sanjna05x">
+        <img src="https://github.com/Sanjna05x.png?size=140" width="95px;" alt="Sanjna" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
+        <br /><b>Sanjna</b>
+      </a>
+      <br />
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(56,189,248,0.15); color:#38bdf8; font-weight:600;">⚙️ ML & Data Engineering Associate</span>
+      <br />
+      <a href="https://github.com/Sanjna05x"><code>@Sanjna05x</code></a>
+      <br /><br />
+      <div align="left" style="font-size:0.78rem; line-height:1.4;">
+        • Dataset curation, cleaning & ingestion pipelines<br/>
+        • Feature engineering validation & consistency checks<br/>
+        • Model evaluation benchmarking & test support<br/>
+        • Pipeline testing and technical verification
+      </div>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <a href="https://github.com/parvsharma1892007-ai">
+        <img src="https://github.com/parvsharma1892007-ai.png?size=140" width="95px;" alt="Parv Sharma" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
+        <br /><b>Parv Sharma</b>
+      </a>
+      <br />
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Research & Documentation Specialist</span>
+      <br />
+      <a href="https://github.com/parvsharma1892007-ai"><code>@parvsharma1892007-ai</code></a>
+      <br /><br />
+      <div align="left" style="font-size:0.78rem; line-height:1.4;">
+        • Research paper manuscript drafting & literature review<br/>
+        • Project synopsis creation & academic report structuring<br/>
+        • Rural policy context & MGNREGA governance synthesis<br/>
+        • Technical documentation and academic formatting
+      </div>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <a href="https://github.com/sanchi2559">
+        <img src="https://github.com/sanchi2559.png?size=140" width="95px;" alt="Sanchi" style="border-radius:50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"/><br />
+        <br /><b>Sanchi</b>
+      </a>
+      <br />
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Research & Documentation Specialist</span>
+      <br />
+      <a href="https://github.com/sanchi2559"><code>@sanchi2559</code></a>
+      <br /><br />
+      <div align="left" style="font-size:0.78rem; line-height:1.4;">
+        • Academic paper compilation & research manuscript editing<br/>
+        • Project synopsis preparation & thesis alignment<br/>
+        • Comprehensive project reporting and documentation<br/>
+        • Viva-voce guide contribution and content review
+      </div>
+    </td>
+  </tr>
+</table>
 
 ---
 
