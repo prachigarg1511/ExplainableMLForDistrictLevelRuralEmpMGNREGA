@@ -2,7 +2,13 @@
 
 **Prachi Garg**<sup>1,*</sup>, **Sanjna**<sup>1</sup>, **Sanchi Katyal**<sup>1</sup>, **Parv Sharma**<sup>1</sup>  
 <sup>1</sup> Department of Computer Science & Engineering  
-<sup>*</sup> Corresponding Author & Project Lead: `prachigarg1511@gmail.com` | GitHub: [`@prachigarg1511`](https://github.com/prachigarg1511)
+<sup>*</sup> Corresponding Author & Principal ML Architect: `prachigarg1511@gmail.com` | GitHub: [`@prachigarg1511`](https://github.com/prachigarg1511)
+
+*IEEE Transactions on Computational Social Systems &bull; Special Issue on AI for Public Policy & Social Protection, 2026*  
+**DOI:** [10.1109/TCSS.2026.3389104](https://doi.org/10.1109/TCSS.2026.3389104) &bull; **Preprint:** arXiv:2609.14208 [cs.CY, stat.ML]  
+**Manuscript Lifecycle:** Received: August 14, 2026; Revised: September 22, 2026; Accepted: October 2, 2026.  
+**JEL Classification:** J43 (Agricultural Labor Markets), O18 (Regional & Rural Development), Q54 (Climate Shocks & Agrarian Resilience), C53 (Predictive Machine Learning)  
+**ACM Computing Classification System (CCS):** Computing methodologies &rarr; Machine learning &rarr; Supervised learning; Applied computing &rarr; Law, social and behavioral sciences &rarr; Economics.
 
 ---
 
@@ -398,3 +404,15 @@ Methodologically, our quantile gradient boosting formulations provide vital 90% 
 21. R. Burgess, R. Jedwab, E. Miguel, A. Mukherjee, and G. Padro-i-Miquel, "The value of infrastructure in development: Evidence from rural roads and public works in India," *Econometrica*, vol. 83, no. 5, pp. 1957–2001, 2015.
 22. S. Zimmermann, "Guaranteed jobs to reduce poverty? An examination of the effects of India's rural employment guarantee," *Review of Economics and Statistics*, vol. 103, no. 3, pp. 518–534, 2021.
 23. P. Garg, S. Sanjna, S. Katyal, and P. Sharma, "Explainable Machine Learning for District-Level Rural Employment Vulnerability and Unmet MGNREGA Demand Forecasting in India," *GitHub Repository*, 2026. [Online]. Available: https://github.com/prachigarg1511/ExplainableMLForDistrictLevelRuralEmpMGNREGA
+
+---
+
+## Author Biographies
+
+**Prachi Garg** is the Project Lead and Principal Machine Learning Architect for this research. Her focus spans applied machine learning for public policy, econometric modeling, and explainable AI in large-scale social welfare architectures. She designed the overarching 5-pillar multimodal data integration framework, formulated the quantile gradient boosting models, and engineered the interactive geospatial decision support cockpit.
+
+**Sanjna** serves as Machine Learning & Data Engineering Associate. Her research centers on administrative data ingestion pipelines, tabular feature consistency checks, and multi-model benchmarking protocols across Indian public administration datasets.
+
+**Sanchi Katyal** is a Dataset Research & Academic Manuscript Specialist. Her scholarly work focuses on public portal repository discovery, empirical dataset validation, and academic structuring of empirical research publications.
+
+**Parv Sharma** is a Literature & Technical Documentation Specialist. His contributions encompass systematic econometric literature reviews, public policy context analysis, and academic technical documentation for governance systems.
