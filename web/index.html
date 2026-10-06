@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MGNREGA ML — District Rural Employment Vulnerability Forecasting | India</title>
+  <meta name="description" content="Explainable Machine Learning Decision-Support System predicting rural employment vulnerability, unmet MGNREGA demand, and climate-labour shocks across 745 Indian districts.">
+  <link rel="stylesheet" href="style.css?v=20260926_2">
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <style>
+    /* ── DIRECT MAP EMBEDDED STYLES TO ENSURE 100% RELIABLE RENDERING ── */
+    .map-controls-toolbar {
+      background: rgba(14, 20, 42, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 16px !important;
+      padding: 1.1rem 1.3rem !important;
+      margin-bottom: 1.2rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .map-metric-tabs {
+      display: flex !important;
+      gap: 0.6rem !important;
+      overflow-x: auto !important;
+      white-space: nowrap !important;
+      padding-bottom: 0.2rem !important;
+    }
+
+    .map-tab {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.45rem !important;
+      background: rgba(22, 32, 60, 0.8) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 10px !important;
+      padding: 0.55rem 1rem !important;
+      color: #94a3b8 !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.84rem !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      flex-shrink: 0 !important;
+      outline: none !important;
+    }
+
+    .map-tab:hover {
+      background: rgba(56, 189, 248, 0.16) !important;
+      border-color: rgba(56, 189, 248, 0.4) !important;
+      color: #f1f5f9 !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .map-tab.active {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.35), rgba(56, 189, 248, 0.35)) !important;
+      border-color: #06b6d4 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 18px rgba(6, 182, 212, 0.3) !important;
+    }
+
+    .map-filter-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 1rem !important;
+      flex-wrap: wrap !important;
+    }
+
+    .map-input-group {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      background: rgba(8, 14, 30, 0.9) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 10px !important;
+      padding: 0.4rem 0.85rem !important;
+    }
+
+    .map-select {
+      background: transparent !important;
+      border: none !important;
+      color: #f1f5f9 !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.84rem !important;
+      cursor: pointer !important;
+      outline: none !important;
+      min-width: 200px !important;
+    }
+    .map-select option {
+      background: #0b1223 !important;
+      color: #f1f5f9 !important;
+    }
+
+    .map-risk-filter-pills {
+      display: flex !important;
+      gap: 0.45rem !important;
+      flex-wrap: wrap !important;
+    }
+
+    .risk-pill {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 9999px !important;
+      padding: 0.35rem 0.85rem !important;
+      color: #94a3b8 !important;
+      font-size: 0.78rem !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      outline: none !important;
+    }
+
+    .risk-pill:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+    }
+
+    .risk-pill.active {
+      background: rgba(255, 255, 255, 0.18) !important;
+      border-color: rgba(255, 255, 255, 0.35) !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+    }
+
+    .risk-pill.high.active {
+      background: rgba(244, 63, 94, 0.2) !important;
+      border-color: rgba(244, 63, 94, 0.45) !important;
+      color: #fda4af !important;
+    }
+
+    .risk-pill.med.active {
+      background: rgba(245, 158, 11, 0.2) !important;
+      border-color: rgba(245, 158, 11, 0.45) !important;
+      color: #fde68a !important;
+    }
+
+    .risk-pill.low.active {
+      background: rgba(16, 185, 129, 0.2) !important;
+      border-color: rgba(16, 185, 129, 0.45) !important;
+      color: #6ee7b7 !important;
+    }
+
+    .map-search-group {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      margin-left: auto !important;
+      flex-wrap: wrap !important;
+    }
+
+    .map-search-group input {
+      background: rgba(8, 14, 30, 0.9) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 10px !important;
+      padding: 0.45rem 0.9rem !important;
+      color: #f1f5f9 !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 0.84rem !important;
+      outline: none !important;
+      min-width: 220px !important;
+    }
+
+    .map-search-group input:focus {
+      border-color: #06b6d4 !important;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.3) !important;
+    }
+
+    .map-reset-btn {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 10px !important;
+      padding: 0.45rem 0.9rem !important;
+      color: #94a3b8 !important;
+      font-size: 0.8rem !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      outline: none !important;
+    }
+
+    .map-reset-btn:hover {
+      background: rgba(56, 189, 248, 0.2) !important;
+      border-color: #38bdf8 !important;
+      color: #38bdf8 !important;
+    }
+
+    /* Dynamic Stats Banner */
+    .map-stats-banner {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
+      gap: 0.85rem !important;
+      background: rgba(10, 16, 32, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 12px !important;
+      padding: 0.9rem 1.3rem !important;
+      margin-bottom: 1.2rem !important;
+    }
+
+    .map-stat-col {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.2rem !important;
+    }
+
+    .map-stat-lbl {
+      font-size: 0.72rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.04em !important;
+      color: #64748b !important;
+    }
+
+    .map-stat-val {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: 1.35rem !important;
+      font-weight: 700 !important;
+      color: #f1f5f9 !important;
+    }
+
+    /* Grid layout */
+    .map-viewport-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 350px !important;
+      gap: 1.2rem !important;
+      align-items: stretch !important;
+    }
+
+    @media (max-width: 1024px) {
+      .map-viewport-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    .map-canvas-wrap {
+      position: relative !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .india-map-container {
+      width: 100% !important;
+      height: 540px !important;
+      background: #060a14 !important;
+    }
+
+    .map-inspector-sidebar {
+      background: rgba(11, 18, 38, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 12px !important;
+      padding: 1.2rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow-y: auto !important;
+      max-height: 540px !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar" id="top">
+    <div class="nav-brand">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-text">
+        <span class="brand-name">NREGA-ML</span>
+        <span class="brand-sub">Employment Vulnerability Forecasting</span>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <button class="nav-btn active" onclick="scrollToSection('overview-section')">📊 Overview</button>
+      <button class="nav-btn" onclick="scrollToSection('map-section')">🗺️ Live Map</button>
+      <button class="nav-btn" onclick="scrollToSection('benchmark-section')">🏆 Models</button>
+      <button class="nav-btn" onclick="scrollToSection('explorer-section')">🔍 Districts</button>
+      <button class="nav-btn" onclick="scrollToSection('forecast-section')">📈 Forecast</button>
+      <button class="nav-btn" onclick="scrollToSection('simulator-section')">🔮 Simulator</button>
+      <button class="nav-btn" onclick="scrollToSection('findings-section')">💡 XAI</button>
+      <button class="nav-btn nav-btn-ai" onclick="toggleAIChatbot()">🤖 AI Copilot</button>
+    </nav>
+    <div class="nav-tag">
+      <span class="pulse-dot"></span>
+      <span id="nav-district-count">745 Districts</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- ══════════════════════════════════════════════════════════
+         HERO SECTION
+    ══════════════════════════════════════════════════════════ -->
+    <section class="hero-section" id="overview-section">
+      <div class="hero-pill">
+        <span>🇮🇳 MoRD MIS + NFHS-5 + IMD Climate + NITI Aayog MPI Integration</span>
+      </div>
+      <h1 class="hero-title">
+        Explainable ML for District-Level<br>
+        <span class="gradient-text">Rural Employment Vulnerability &amp; Unmet MGNREGA Demand</span>
+      </h1>
+      <p class="hero-subtitle">
+        Bridging the gap between retrospective econometric analysis and operational forecasting. 
+        Integrating dynamic human-capital indicators (female literacy, schooling), agro-climatic 
+        precipitation shocks, and MGNREGA participation into an early-warning decision-support system.
+      </p>
+      <div class="hero-badges">
+        <span class="hero-badge">🤖 8 ML Models Benchmarked</span>
+        <span class="hero-badge">📍 745 Districts Trained</span>
+        <span class="hero-badge">📊 5-Fold Cross Validated</span>
+        <span class="hero-badge">🎯 R² 0.70 Champion</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         KPI CARDS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="kpi-grid">
+      <div class="kpi-card highlight">
+        <div class="kpi-header">
+          <span class="kpi-label">Districts Analyzed</span>
+          <span class="kpi-icon">🏛️</span>
+        </div>
+        <div class="kpi-value" id="kpi-districts">745</div>
+        <div class="kpi-subtext">Across 34 States &amp; Union Territories</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">Total HH Demanded</span>
+          <span class="kpi-icon">📋</span>
+        </div>
+        <div class="kpi-value" id="kpi-demanded">--</div>
+        <div class="kpi-subtext">Total active rural work demands recorded</div>
+      </div>
+
+      <div class="kpi-card high">
+        <div class="kpi-header">
+          <span class="kpi-label">Unmet Demand Backlog</span>
+          <span class="kpi-icon">⚠️</span>
+        </div>
+        <div class="kpi-value" id="kpi-unmet">--</div>
+        <div class="kpi-subtext" id="kpi-unmet-sub">Demanded minus Worked gap</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">National Fulfillment Rate</span>
+          <span class="kpi-icon">📈</span>
+        </div>
+        <div class="kpi-value" id="kpi-fulfillment">--%</div>
+        <div class="kpi-subtext">National HH allocation efficiency</div>
+      </div>
+
+      <div class="kpi-card high">
+        <div class="kpi-header">
+          <span class="kpi-label">High-Risk Districts</span>
+          <span class="kpi-icon">🔴</span>
+        </div>
+        <div class="kpi-value" id="kpi-high-risk">--</div>
+        <div class="kpi-subtext">Fulfillment &lt; 80% or Unmet &gt; 25k HH</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <span class="kpi-label">Contingency Fund Required</span>
+          <span class="kpi-icon">💰</span>
+        </div>
+        <div class="kpi-value" id="kpi-fund">--</div>
+        <div class="kpi-subtext">At notified FY 24-25 wage rates (Cr)</div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 0: INTERACTIVE INDIA MAP
+    ══════════════════════════════════════════════════════════ -->
+    <section class="panel" id="map-section">
+      <div class="panel-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+            <h2 class="panel-title">🗺️ Interactive District Vulnerability &amp; Demand Map</h2>
+            <span class="panel-badge" style="background: rgba(6,182,212,0.15); color: #38bdf8; border: 1px solid rgba(6,182,212,0.35);">Live Spatial Intelligence</span>
+          </div>
+          <p class="panel-description">
+            Explore rural employment vulnerability across 745 Indian districts. Switch layers to visualize Risk Tiers, Unmet Demand, Rainfall Deficits, Female Literacy, or Contingency Budgets. Click any district to open the Live Inspector.
+          </p>
+        </div>
+      </div>
+
+      <!-- Map Toolbar & Layer Switchers -->
+      <div class="map-controls-toolbar">
+        <!-- Layer Metric Selector Tabs -->
+        <div class="map-metric-tabs">
+          <button class="map-tab active" id="mtab-risk" onclick="setMapMetric('risk')">
+            <span>🎯</span> Risk Tiers
+          </button>
+          <button class="map-tab" id="mtab-unmet" onclick="setMapMetric('unmet')">
+            <span>⚠️</span> Unmet Demand Volume
+          </button>
+          <button class="map-tab" id="mtab-rainfall" onclick="setMapMetric('rainfall')">
+            <span>🌧️</span> Annual Rainfall (IMD)
+          </button>
+          <button class="map-tab" id="mtab-literacy" onclick="setMapMetric('literacy')">
+            <span>📚</span> Female Literacy (NFHS-5)
+          </button>
+          <button class="map-tab" id="mtab-budget" onclick="setMapMetric('budget')">
+            <span>💰</span> Contingency Budget (₹ Cr)
+          </button>
+        </div>
+
+        <!-- State & District Search Filter Row -->
+        <div class="map-filter-row">
+          <!-- State Filter -->
+          <div class="map-input-group">
+            <span class="map-input-icon">🏛️</span>
+            <select id="map-state-filter" class="map-select" onchange="onMapStateChange(this.value)">
+              <option value="all">All States &amp; UTs (National View)</option>
+              <!-- Populated dynamically with all states -->
+            </select>
+          </div>
+
+          <!-- Risk Filter Pills -->
+          <div class="map-risk-filter-pills">
+            <button class="risk-pill active" id="rpill-all" onclick="filterMapByTier('all')">All (<span id="count-all">745</span>)</button>
+            <button class="risk-pill high" id="rpill-high" onclick="filterMapByTier('High')">🔴 High (<span id="count-high">--</span>)</button>
+            <button class="risk-pill med" id="rpill-med" onclick="filterMapByTier('Medium')">🟡 Med (<span id="count-med">--</span>)</button>
+            <button class="risk-pill low" id="rpill-low" onclick="filterMapByTier('Low')">🟢 Low (<span id="count-low">--</span>)</button>
+          </div>
+
+          <!-- Quick District Search -->
+          <div class="map-search-group">
+            <span class="map-search-icon">🔍</span>
+            <input type="text" id="map-district-search" placeholder="Search district (e.g. Sitapur)..." oninput="onMapSearchInput(this.value)">
+            <button class="map-reset-btn" onclick="resetMapAllIndia()" title="Reset to All-India View">↺ Reset View</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Dynamic Statistics Bar -->
+      <div class="map-stats-banner">
+        <div class="map-stat-col">
+          <span class="map-stat-lbl">Districts Displayed</span>
+          <span class="map-stat-val" id="mstat-districts">745 Districts</span>
+        </div>
+        <div class="map-stat-col">
+          <span class="map-stat-lbl">Unmet Demand in View</span>
+          <span class="map-stat-val" id="mstat-unmet" style="color: var(--risk-high);">-- M HH</span>
+        </div>
+        <div class="map-stat-col">
+          <span class="map-stat-lbl">Avg Fulfillment Rate</span>
+          <span class="map-stat-val" id="mstat-fulfill" style="color: var(--accent-cyan);">--%</span>
+        </div>
+        <div class="map-stat-col">
+          <span class="map-stat-lbl">Total Contingency Budget</span>
+          <span class="map-stat-val" id="mstat-budget" style="color: #c084fc;">₹-- Cr</span>
+        </div>
+      </div>
+
+      <!-- Map + District Inspector Sidebar Layout -->
+      <div class="map-viewport-grid">
+        <!-- Map Canvas -->
+        <div class="map-canvas-wrap">
+          <div id="india-map" class="india-map-container"></div>
+          
+          <!-- Map Overlay Floating Guide -->
+          <div class="map-overlay-guide">
+            <span class="guide-tag">💡 Map Guide</span>
+            <span id="map-guide-text">Click any district marker to inspect its detailed indicators. Circle size indicates unmet demand magnitude.</span>
+          </div>
+        </div>
+
+        <!-- Live District Inspector Sidebar -->
+        <div class="map-inspector-sidebar" id="map-inspector">
+          <!-- Initial Placeholder State -->
+          <div class="inspector-empty-state" id="inspector-placeholder">
+            <div class="inspector-empty-icon">📍</div>
+            <h4 style="font-family:'Outfit'; font-size:1.1rem; color:var(--text-primary); margin-bottom:0.4rem;">District Live Inspector</h4>
+            <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">Click any circle on the map to inspect its real-time administrative bottleneck, climate factors, and AI feature forces.</p>
+            
+            <div style="margin-top:1.2rem; width:100%;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:0.5rem; text-align:left;">Critical Hotspots to Explore:</div>
+              <div class="hotspot-list">
+                <button class="hotspot-chip" onclick="quickSelectHotspot('Sitapur')">🔴 Sitapur (UP)</button>
+                <button class="hotspot-chip" onclick="quickSelectHotspot('Hardoi')">🔴 Hardoi (UP)</button>
+                <button class="hotspot-chip" onclick="quickSelectHotspot('Kalahandi')">🔴 Kalahandi (Odisha)</button>
+                <button class="hotspot-chip" onclick="quickSelectHotspot('Barmer')">🔴 Barmer (Rajasthan)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Inspected District View (Filled Dynamically) -->
+          <div class="inspector-active-state" id="inspector-details" style="display: none;">
+            <div class="inspector-header">
+              <div>
+                <h3 class="inspector-name" id="insp-name">Sitapur</h3>
+                <div class="inspector-state" id="insp-state">UTTAR PRADESH</div>
+              </div>
+              <span class="badge-tier" id="insp-tier">HIGH RISK</span>
+            </div>
+
+            <!-- Why this tier box -->
+            <div class="inspector-reason-box" id="insp-reason">
+              Fulfillment rate is below 80% with substantial unmet work demand backlog.
+            </div>
+
+            <!-- Mini Data Grid -->
+            <div class="inspector-metrics-grid">
+              <div class="insp-cell">
+                <div class="insp-lbl">HH Demanded</div>
+                <div class="insp-val" id="insp-demanded">--</div>
+              </div>
+              <div class="insp-cell">
+                <div class="insp-lbl">HH Worked</div>
+                <div class="insp-val" id="insp-worked">--</div>
+              </div>
+              <div class="insp-cell high">
+                <div class="insp-lbl">Unmet Gap</div>
+                <div class="insp-val" id="insp-unmet" style="color:var(--risk-high);">--</div>
+              </div>
+              <div class="insp-cell">
+                <div class="insp-lbl">Fulfillment</div>
+                <div class="insp-val" id="insp-fulfill">--%</div>
+              </div>
+              <div class="insp-cell">
+                <div class="insp-lbl">Female Literacy</div>
+                <div class="insp-val" id="insp-lit">--%</div>
+              </div>
+              <div class="insp-cell">
+                <div class="insp-lbl">Annual Rain</div>
+                <div class="insp-val" id="insp-rain">-- mm</div>
+              </div>
+              <div class="insp-cell">
+                <div class="insp-lbl">Daily Wage</div>
+                <div class="insp-val" id="insp-wage">₹--</div>
+              </div>
+              <div class="insp-cell highlight">
+                <div class="insp-lbl">Contingency Fund</div>
+                <div class="insp-val" id="insp-fund" style="color:#c084fc;">₹-- Cr</div>
+              </div>
+            </div>
+
+            <!-- Top AI Drivers list -->
+            <div style="margin-top: 0.8rem;">
+              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:0.4rem;">Top AI Feature Drivers:</div>
+              <div id="insp-attributions" class="insp-drivers-list"></div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="inspector-actions">
+              <button class="insp-action-btn primary" id="insp-btn-forecast" onclick="jumpToForecastDistrict()">
+                <span>🔮 Forecast Trajectory</span>
+              </button>
+              <button class="insp-action-btn secondary" id="insp-btn-ai" onclick="askAICopilotAboutDistrict()">
+                <span>🤖 Ask AI Copilot</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rich Visual Legend -->
+      <div class="map-rich-legend" id="map-rich-legend">
+        <!-- Dynamically rendered based on active metric -->
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 1: MODEL BENCHMARKS & LEADERBOARD
+    ══════════════════════════════════════════════════════════ -->
+    <section class="panel" id="benchmark-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">🏆 Empirical Machine Learning Model Leaderboard</h2>
+          <p class="panel-description">Comparing 8 trained algorithms across Task 1 (Unmet Demand Regression) and Task 2 (Vulnerability Tier Classification) with 5-Fold Stratified Cross-Validation.</p>
+        </div>
+        <div class="panel-badge">5-Fold Cross Validated</div>
+      </div>
+
+      <div class="benchmark-layout">
+        <!-- Task 1: Regression -->
+        <div class="benchmark-card">
+          <div class="benchmark-card-title">
+            <span>Task 1: Unmet Demand Regression</span>
+            <span class="badge-champion" id="reg-champion-label">Gradient Boosting: R² 0.699</span>
+          </div>
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Test R²</th>
+                <th>5-Fold CV R²</th>
+                <th>RMSE (HH)</th>
+                <th>MAE (HH)</th>
+              </tr>
+            </thead>
+            <tbody id="regression-benchmark-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+          <div style="margin-top: 1.5rem; height: 220px;">
+            <canvas id="chart-regression-benchmarks"></canvas>
+          </div>
+        </div>
+
+        <!-- Task 2: Classification -->
+        <div class="benchmark-card">
+          <div class="benchmark-card-title">
+            <span>Task 2: Vulnerability Tier Classification</span>
+            <span class="badge-champion" id="cls-champion-label">Random Forest: 79.2% Acc</span>
+          </div>
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Test Acc</th>
+                <th>CV Acc</th>
+                <th>Precision</th>
+                <th>Weighted F1</th>
+              </tr>
+            </thead>
+            <tbody id="classification-benchmark-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+          <div style="margin-top: 1.5rem; height: 220px;">
+            <canvas id="chart-classification-benchmarks"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cross-Region Transferability Matrix (GAP 15) -->
+      <div class="transferability-section">
+        <h3 class="sub-section-title">🌐 Cross-Region Model Transferability Matrix <span class="badge-info">GAP 15 — Spatial Generalization</span></h3>
+        <p class="panel-description" style="margin-bottom:1.2rem;">Model trained on southern districts tested on northern/central districts and vice versa. Validates whether district-level vulnerability signals generalize across agro-climatic zones.</p>
+        <div class="transferability-grid" id="transferability-grid">
+          <!-- Dynamically populated -->
+        </div>
+        <div style="height: 200px; margin-top: 1.5rem;">
+          <canvas id="chart-transferability"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 2: DISTRICT VULNERABILITY EXPLORER
+    ══════════════════════════════════════════════════════════ -->
+    <section class="panel" id="explorer-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">🔍 District Vulnerability Explorer &amp; Profiler</h2>
+          <p class="panel-description">Inspect any Indian district's employment gap, dynamic female literacy, annual rainfall, multi-dimensional deprivation, and local SHAP-style AI attributions.</p>
+        </div>
+        <div class="panel-badge">Interactive Live Inspector</div>
+      </div>
+
+      <div class="district-selector-row">
+        <div class="select-group">
+          <label for="state-select">Select State / UT</label>
+          <select id="state-select" class="custom-select" onchange="onStateChange()">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+        <div class="select-group">
+          <label for="district-select">Select District</label>
+          <select id="district-select" class="custom-select" onchange="onDistrictChange()">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+        <div class="select-group">
+          <label for="risk-filter-explorer">Filter by Risk Tier</label>
+          <select id="risk-filter-explorer" class="custom-select" onchange="onRiskFilterChange()">
+            <option value="all">All Tiers</option>
+            <option value="High">High Risk</option>
+            <option value="Medium">Medium Risk</option>
+            <option value="Low">Low Risk</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="district-details-grid">
+        <!-- District Info Box -->
+        <div class="district-hero-box">
+          <div>
+            <div class="district-header-badge">
+              <div>
+                <h3 class="district-name-title" id="d-name">District Name</h3>
+                <div class="state-subtitle" id="d-state">State Name</div>
+              </div>
+              <div class="risk-tag High" id="d-risk-tag">HIGH RISK</div>
+            </div>
+
+            <div class="metrics-stat-list">
+              <div class="stat-item">
+                <div class="stat-item-label">Households Demanded</div>
+                <div class="stat-item-val" id="d-demanded">0</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Households Worked</div>
+                <div class="stat-item-val" id="d-worked">0</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Actual Unmet Demand</div>
+                <div class="stat-item-val" style="color: var(--risk-high);" id="d-unmet">0</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Fulfillment Rate</div>
+                <div class="stat-item-val" id="d-fulfill">0%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">ML Predicted Unmet</div>
+                <div class="stat-item-val" style="color: var(--accent-cyan);" id="d-pred-unmet">0</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">90% CI: P05 – P95</div>
+                <div class="stat-item-val" style="font-size:0.95rem; color: var(--accent-blue);" id="d-ci">-- – --</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Female Literacy (NFHS-5)</div>
+                <div class="stat-item-val" id="d-female-lit">0%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Annual Rainfall (IMD)</div>
+                <div class="stat-item-val" id="d-rain">0 mm</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">SC/ST Job Card Share</div>
+                <div class="stat-item-val" id="d-scst">0%</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Daily Wage Rate (FY25)</div>
+                <div class="stat-item-val" id="d-wage">₹0</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Contingency Budget</div>
+                <div class="stat-item-val" id="d-fund">0 Cr</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-item-label">Sanitation Access</div>
+                <div class="stat-item-val" id="d-sanitation">0%</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 1.2rem; font-size: 0.78rem; color: var(--text-muted);">
+            Source: MoRD MIS (2024), IIPS NFHS-5 Factsheets, IMD Hydromet Precipitation Records.
+          </div>
+        </div>
+
+        <!-- Right panel: Radar + SHAP Attributions -->
+        <div class="district-right-panel">
+          <div class="district-hero-box" style="align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+            <h4 class="chart-section-title">Vulnerability Profile Dimensions</h4>
+            <div style="width: 100%; height: 300px; display: flex; justify-content: center;">
+              <canvas id="chart-district-radar"></canvas>
+            </div>
+          </div>
+
+          <div class="district-hero-box">
+            <h4 class="chart-section-title">Local AI Attribution (SHAP-style) for <span id="d-shap-name">—</span></h4>
+            <div style="height: 200px; margin-top: 0.8rem;">
+              <canvas id="chart-shap-local"></canvas>
+            </div>
+            <p class="shap-desc">Positive values push predicted unmet demand higher; negative values reduce it vs. the national average baseline.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 3: FORECAST TIMELINE
+    ══════════════════════════════════════════════════════════ -->
+    <section class="panel" id="forecast-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">📈 National Forecast Timeline &amp; Trend Analysis</h2>
+          <p class="panel-description">Gradient Boosting ensemble projections for national unmet demand through FY 2029-30, incorporating baseline, optimistic (literacy mission + budget expansion), and pessimistic (climate shock + economic distress) scenarios.</p>
+        </div>
+        <div class="panel-badge">Multi-Horizon Ensemble</div>
+      </div>
+
+      <div class="forecast-layout">
+        <div class="forecast-chart-panel">
+          <div class="forecast-tab-row">
+            <button class="forecast-tab active" onclick="setForecastView('national')" id="tab-national">National Trend</button>
+            <button class="forecast-tab" onclick="setForecastView('states')" id="tab-states">Top 10 States</button>
+            <button class="forecast-tab" onclick="setForecastView('interval')" id="tab-interval">Prediction Intervals</button>
+          </div>
+          <div style="height: 350px; margin-top: 1rem;">
+            <canvas id="chart-forecast-national"></canvas>
+          </div>
+        </div>
+
+        <div class="forecast-legend-panel">
+          <h4 class="chart-section-title" style="margin-bottom: 1.2rem;">Scenario Definitions</h4>
+          <div class="scenario-legend-item baseline">
+            <div class="scenario-dot baseline-dot"></div>
+            <div>
+              <div class="scenario-name">📊 Baseline (Business-as-Usual)</div>
+              <div class="scenario-detail">Existing literacy trends + avg rainfall. Unmet demand declines 2.1% yr⁻¹</div>
+            </div>
+          </div>
+          <div class="scenario-legend-item optimistic">
+            <div class="scenario-dot optimistic-dot"></div>
+            <div>
+              <div class="scenario-name">🌱 Optimistic (Policy Intervention)</div>
+              <div class="scenario-detail">+15% female literacy program + ₹500 Cr budget uplift. Unmet demand falls 8.4% yr⁻¹</div>
+            </div>
+          </div>
+          <div class="scenario-legend-item pessimistic">
+            <div class="scenario-dot pessimistic-dot"></div>
+            <div>
+              <div class="scenario-name">⚠️ Pessimistic (Climate + Distress)</div>
+              <div class="scenario-detail">-30% rainfall + +25% labour shock. Unmet surges to +18.9% above baseline by FY30</div>
+            </div>
+          </div>
+
+          <div class="forecast-summary-box" style="margin-top:1.5rem;">
+            <div class="forecast-kpi">
+              <div class="forecast-kpi-val" id="forecast-target">11.7 M</div>
+              <div class="forecast-kpi-lbl">Baseline FY 2030 Projection</div>
+            </div>
+            <div class="forecast-kpi">
+              <div class="forecast-kpi-val green" id="forecast-best">9.2 M</div>
+              <div class="forecast-kpi-lbl">Optimistic Scenario</div>
+            </div>
+            <div class="forecast-kpi">
+              <div class="forecast-kpi-val red" id="forecast-worst">16.7 M</div>
+              <div class="forecast-kpi-lbl">Pessimistic Scenario</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── DISTRICT FUTURE OUTCOME FORECASTER ─── -->
+      <div class="district-forecast-container">
+        <div class="district-forecast-header-row">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <span style="font-size: 1.35rem;">🎯</span>
+              <h3 style="font-family: 'Outfit'; font-size: 1.25rem; font-weight: 700;">District Future Outcome Forecaster (FY 2025 – FY 2030)</h3>
+              <span class="panel-badge" style="background: rgba(168,85,247,0.18); color: #c084fc; border: 1px solid rgba(168,85,247,0.35);">Micro-Horizon Projections</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-top: 0.35rem;">
+              Project multi-year trajectory forecasts for any of India's 745 districts under varying agro-climatic shocks, rural economic inflation, and literacy missions.
+            </p>
+          </div>
+          <div class="district-forecast-controls">
+            <div class="explorer-selector-wrap" style="min-width: 250px;">
+              <select id="district-forecast-select" class="district-select" onchange="onDistrictForecastChange(this.value)">
+                <!-- Dynamically populated with all districts -->
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pathway Selector Buttons -->
+        <div class="pathway-button-row">
+          <button class="pathway-btn active" id="path-baseline" onclick="setFuturePathway('baseline')">
+            <span class="pathway-icon">🌤️</span>
+            <div>
+              <div class="pathway-title">Baseline Pathway</div>
+              <div class="pathway-sub">Historical trend + normal monsoon</div>
+            </div>
+          </button>
+          <button class="pathway-btn" id="path-drought" onclick="setFuturePathway('drought')">
+            <span class="pathway-icon">☀️</span>
+            <div>
+              <div class="pathway-title">El Niño Drought Shock</div>
+              <div class="pathway-sub">-30% rainfall + agrarian distress</div>
+            </div>
+          </button>
+          <button class="pathway-btn" id="path-distress" onclick="setFuturePathway('distress')">
+            <span class="pathway-icon">📉</span>
+            <div>
+              <div class="pathway-title">Rural Wage Stagnation</div>
+              <div class="pathway-sub">+25% casual labour demand surge</div>
+            </div>
+          </button>
+          <button class="pathway-btn" id="path-policy" onclick="setFuturePathway('policy')">
+            <span class="pathway-icon">🚀</span>
+            <div>
+              <div class="pathway-title">Mission-Mode Policy</div>
+              <div class="pathway-sub">+15% literacy + ₹500 Cr budget uplift</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Future Forecaster Grid -->
+        <div class="district-forecast-grid">
+          <!-- Chart Card -->
+          <div class="district-forecast-chart-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+              <div>
+                <h4 style="font-family: 'Outfit'; font-size: 1.05rem;" id="df-chart-title">Unmet Demand Trajectory (FY 2024 - FY 2030)</h4>
+                <div style="font-size: 0.78rem; color: var(--text-muted);">Upper &amp; lower bounds display the 90% prediction interval (P05 – P95)</div>
+              </div>
+              <span class="badge-tier" id="df-status-badge">HIGH RISK</span>
+            </div>
+            <div style="height: 310px;">
+              <canvas id="chart-district-future"></canvas>
+            </div>
+          </div>
+
+          <!-- Outcome Projection Metrics -->
+          <div class="district-forecast-metrics-card">
+            <h4 style="font-family: 'Outfit'; font-size: 1.05rem; margin-bottom: 0.8rem;">Future Outcome Metrics</h4>
+
+            <div class="future-kpi-item">
+              <div class="future-kpi-label">FY 2026-27 Forecasted Unmet Demand</div>
+              <div class="future-kpi-val" id="df-val-2026">-- HH</div>
+              <div class="future-kpi-sub" id="df-sub-2026">-- vs FY24 Actual</div>
+            </div>
+
+            <div class="future-kpi-item">
+              <div class="future-kpi-label">FY 2029-30 Long-Term Horizon</div>
+              <div class="future-kpi-val" id="df-val-2030">-- HH</div>
+              <div class="future-kpi-sub" id="df-sub-2030">-- vs Baseline</div>
+            </div>
+
+            <div class="future-kpi-item">
+              <div class="future-kpi-label">Projected Fulfillment Ratio</div>
+              <div class="future-kpi-val" id="df-val-fulfill">--%</div>
+              <div class="future-kpi-sub" id="df-sub-fulfill">Projected Delivery Capacity</div>
+            </div>
+
+            <div class="future-kpi-item highlight">
+              <div class="future-kpi-label">Cumulative 5-Yr Contingency Fund</div>
+              <div class="future-kpi-val" id="df-val-budget">₹-- Cr</div>
+              <div class="future-kpi-sub" id="df-sub-budget">At State FY25 Wage Rate</div>
+            </div>
+
+            <div class="future-alert-box" id="df-alert-box">
+              <span class="alert-icon">⚠️</span>
+              <div id="df-alert-text">Early Warning: High probability of scheme capacity bottleneck under selected pathway.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 4: POLICY & CLIMATE SHOCK SIMULATOR
+    ══════════════════════════════════════════════════════════ -->
+    <section class="panel" id="simulator-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">🔮 Interactive "What-If" Policy &amp; Climate Simulator</h2>
+          <p class="panel-description">Simulate exogenous climate shocks, demand surges, and female literacy programs to forecast national unmet demand and reclassify high-risk districts in real time.</p>
+        </div>
+        <div class="panel-badge">Forward-Looking Early Warning</div>
+      </div>
+
+      <div class="simulator-layout">
+        <!-- Controls -->
+        <div class="simulator-controls">
+          <h3 style="font-family: 'Outfit'; font-size: 1.15rem; margin-bottom: 1.2rem;">Simulation Parameters</h3>
+
+          <div class="control-item">
+            <div class="control-header">
+              <span>☔ Monsoon Rainfall Shock (%)</span>
+              <span class="control-value" id="val-rain-slider">0%</span>
+            </div>
+            <input type="range" min="-50" max="50" value="0" step="5" class="range-slider" id="slider-rain" oninput="runLiveSimulation()">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">
+              <span>Severe Drought (−50%)</span>
+              <span>Normal (0%)</span>
+              <span>Excess (+50%)</span>
+            </div>
+          </div>
+
+          <div class="control-item">
+            <div class="control-header">
+              <span>📚 Female Literacy Program Shift (%)</span>
+              <span class="control-value" id="val-lit-slider">+0%</span>
+            </div>
+            <input type="range" min="-10" max="30" value="0" step="5" class="range-slider" id="slider-lit" oninput="runLiveSimulation()">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">
+              <span>Drop (−10%)</span>
+              <span>Baseline (+0%)</span>
+              <span>Intensive (+30%)</span>
+            </div>
+          </div>
+
+          <div class="control-item">
+            <div class="control-header">
+              <span>📉 Rural Employment Demand Shock (%)</span>
+              <span class="control-value" id="val-demand-slider">+0%</span>
+            </div>
+            <input type="range" min="-30" max="50" value="0" step="5" class="range-slider" id="slider-demand" oninput="runLiveSimulation()">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">
+              <span>Recovery (−30%)</span>
+              <span>Baseline (+0%)</span>
+              <span>Labour Shock (+50%)</span>
+            </div>
+          </div>
+
+          <div class="control-item">
+            <div class="control-header">
+              <span>💰 Budget Expansion (%)</span>
+              <span class="control-value" id="val-budget-slider">+0%</span>
+            </div>
+            <input type="range" min="-20" max="40" value="0" step="5" class="range-slider" id="slider-budget" oninput="runLiveSimulation()">
+            <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-top:0.2rem;">
+              <span>Cut (−20%)</span>
+              <span>Baseline (+0%)</span>
+              <span>Boost (+40%)</span>
+            </div>
+          </div>
+
+          <div class="preset-buttons">
+            <span style="font-size:0.75rem; color:var(--text-muted); width:100%; margin-bottom:0.3rem;">⚡ Quick Presets:</span>
+            <button class="preset-btn" onclick="applyPreset(-30, 0, 18, 0)">🌧️ Severe Drought</button>
+            <button class="preset-btn" onclick="applyPreset(0, 15, 0, 20)">🎓 Literacy Mission</button>
+            <button class="preset-btn" onclick="applyPreset(0, 0, 25, -10)">📈 Economic Distress</button>
+            <button class="preset-btn" onclick="applyPreset(-40, 0, 30, 0)">🔥 2002-type Drought</button>
+            <button class="preset-btn" onclick="applyPreset(0, 25, -15, 30)">🌿 Best-Case Policy</button>
+            <button class="preset-btn" onclick="applyPreset(0, 0, 0, 0)">↺ Reset Baseline</button>
+          </div>
+        </div>
+
+        <!-- Simulation Forecast Display -->
+        <div class="simulator-results">
+          <div>
+            <div class="sim-delta-banner" id="sim-banner">
+              <div>
+                <div class="sim-delta-title">Forecasted National Unmet Demand</div>
+                <div style="font-size:0.8rem; color:var(--text-muted);" id="sim-change-desc">Baseline vs Simulated</div>
+              </div>
+              <div class="sim-delta-val" id="sim-unmet-total">-- M</div>
+            </div>
+
+            <div style="height: 250px;">
+              <canvas id="chart-scenario-comparison"></canvas>
+            </div>
+          </div>
+
+          <div class="sim-risk-grid">
+            <div class="sim-risk-cell high">
+              <div class="sim-risk-label">🔴 High Risk</div>
+              <div class="sim-risk-val" id="sim-high-count">--</div>
+              <div class="sim-risk-delta" id="sim-high-delta"></div>
+            </div>
+            <div class="sim-risk-cell med">
+              <div class="sim-risk-label">🟡 Medium Risk</div>
+              <div class="sim-risk-val" id="sim-med-count">--</div>
+              <div class="sim-risk-delta" id="sim-med-delta"></div>
+            </div>
+            <div class="sim-risk-cell low">
+              <div class="sim-risk-label">🟢 Low Risk</div>
+              <div class="sim-risk-val" id="sim-low-count">--</div>
+              <div class="sim-risk-delta" id="sim-low-delta"></div>
+            </div>
+          </div>
+
+          <div class="contingency-bar">
+            <div class="contingency-label">
+              <span>💸 Required Contingency Budget</span>
+              <span class="contingency-val" id="sim-contingency">₹17,325 Cr</span>
+            </div>
+            <div class="bar-track">
+              <div class="bar-fill" id="sim-budget-bar" style="width:60%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SECTION 5: XAI & EMPIRICAL GAP INSIGHTS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="panel" id="findings-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">💡 Explainable AI (XAI) &amp; Literature Gap Resolutions</h2>
+          <p class="panel-description">Feature attributions and scientific conclusions addressing 6 key research gaps from the literature review. All conclusions are empirically validated from the trained models.</p>
+        </div>
+        <div class="panel-badge">Explainable ML</div>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <h3 class="sub-section-title">Global Feature Importance Ranking (Gradient Boosting Attributions)</h3>
+        <div style="height: 280px;">
+          <canvas id="chart-feature-importance"></canvas>
+        </div>
+      </div>
+
+      <div class="gap-grid">
+        <div class="gap-card gap-high">
+          <span class="gap-badge">GAP 1 &amp; 2 • Dynamic Human Capital</span>
+          <h3 class="gap-title">Dynamic Literacy Rather Than Static Census</h3>
+          <p class="gap-text">
+            By updating female literacy and secondary schooling from NFHS-5 factsheets rather than static 2011 Census figures, the model captures real human-capital disparities. Districts with low female literacy (&lt;50%) combined with high SC/ST job card share show <strong>2.4× higher propensity</strong> for unmet demand bottlenecks.
+          </p>
+          <div class="gap-metric"><span>Model Contribution</span><strong>~8% Feature Importance</strong></div>
+        </div>
+
+        <div class="gap-card gap-med">
+          <span class="gap-badge">GAP 4 &amp; 5 • Target Redefinition</span>
+          <h3 class="gap-title">Predicting Unmet Demand Over Gross Persondays</h3>
+          <p class="gap-text">
+            Predicting gross persondays merely mirrors past administrative scale. Predicting <strong>Unmet Demand (Demanded − Worked)</strong> directly isolates administrative rationing and distress signals. ML achieves an R² of <strong>0.699</strong> forecasting bottlenecks across 745 districts.
+          </p>
+          <div class="gap-metric"><span>Best Model R²</span><strong>0.699 (GB Regressor)</strong></div>
+        </div>
+
+        <div class="gap-card gap-high">
+          <span class="gap-badge">GAP 14 • Shock-Aware Modelling</span>
+          <h3 class="gap-title">Compound Climate–Labour Shocks</h3>
+          <p class="gap-text">
+            A 30% monsoon rainfall deficit creates an asymmetric surge (+13.9% in national unmet demand), pushing 89 additional districts into High-Risk. Tree ensembles accurately capture the nonlinear threshold where rainfall deficits below 650 mm trigger mass agricultural disengagement and MGNREGA influx.
+          </p>
+          <div class="gap-metric"><span>Rain Elasticity</span><strong>−0.46 per −10% Rainfall</strong></div>
+        </div>
+
+        <div class="gap-card gap-low">
+          <span class="gap-badge">GAP 15 • Spatial Generalization</span>
+          <h3 class="gap-title">Cross-Region Model Transferability</h3>
+          <p class="gap-text">
+            Models trained on peninsular southern districts achieve R² of 0.552 when tested on Gangetic/northern districts — indicating partial transferability. The 20% performance drop signals the need for region-specific fine-tuning in agro-climatic zones with distinct socioeconomic structures.
+          </p>
+          <div class="gap-metric"><span>Out-of-Domain R²</span><strong>0.552 (South→North)</strong></div>
+        </div>
+
+        <div class="gap-card gap-med">
+          <span class="gap-badge">GAP 7 • Demand Pressure</span>
+          <h3 class="gap-title">Work Demand-to-Jobcard Ratio as Dominant Signal</h3>
+          <p class="gap-text">
+            The ratio of households demanding work per registered jobcard (<strong>demand pressure ratio</strong>) is the single most important feature (48.2% importance), capturing administrative capacity ceilings beyond which unmet demand surges nonlinearly.
+          </p>
+          <div class="gap-metric"><span>Feature Importance</span><strong>48.2% (Top Predictor)</strong></div>
+        </div>
+
+        <div class="gap-card gap-low">
+          <span class="gap-badge">GAP 3 &amp; 16 • Policy Actionability</span>
+          <h3 class="gap-title">Contingency Budget &amp; Wage-Rate Integration</h3>
+          <p class="gap-text">
+            By embedding state-specific FY 2024-25 notified MGNREGA wage rates into model outputs, the system directly quantifies the contingency budget (₹17,325 Cr national baseline) required to fulfill predicted unmet demand — enabling direct policy budget planning.
+          </p>
+          <div class="gap-metric"><span>Baseline Budget</span><strong>₹17,325 Crore</strong></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="footer-icon">⚡</span>
+        <div>
+          <div class="footer-title">NREGA-ML Vulnerability Forecasting System</div>
+          <div class="footer-sub">Explainable Machine Learning for District-Level Rural Employment Vulnerability and Unmet MGNREGA Demand</div>
+        </div>
+      </div>
+      <div class="footer-sources">
+        <div class="footer-source-item">📦 Ministry of Rural Development MIS (2024)</div>
+        <div class="footer-source-item">📊 IIPS NFHS-5 District Factsheets</div>
+        <div class="footer-source-item">🌧️ India Meteorological Department Hydromet</div>
+        <div class="footer-source-item">📈 NITI Aayog Multidimensional Poverty Index</div>
+      </div>
+    </div>
+  <!-- ══════════════════════════════════════════════════════════
+       FLOATING AI COPILOT CHATBOT
+  ══════════════════════════════════════════════════════════ -->
+  <div class="ai-chat-bubble-btn" id="ai-chat-btn" onclick="toggleAIChatbot()">
+    <div class="ai-btn-pulse"></div>
+    <span class="ai-btn-icon">🤖</span>
+    <span class="ai-btn-text">NREGA AI Copilot</span>
+    <span class="ai-btn-badge">AI Live</span>
+  </div>
+
+  <div class="ai-chat-modal" id="ai-chat-modal">
+    <!-- Header -->
+    <div class="ai-modal-header">
+      <div class="ai-header-left">
+        <div class="ai-avatar">⚡</div>
+        <div>
+          <div class="ai-modal-title">NREGA Intelligence Copilot</div>
+          <div class="ai-modal-status">
+            <span class="status-dot"></span>
+            <span>745 Districts • Gemini 3.8 Flash ✨ AI Live</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-header-actions">
+        <button class="ai-icon-btn" onclick="clearAIChat()" title="Clear Chat">🗑️</button>
+        <button class="ai-icon-btn" onclick="toggleAIChatbot()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Quick Prompt Pills -->
+    <div class="ai-quick-pills">
+      <button class="ai-pill" onclick="sendQuickPrompt('What are the top 5 most vulnerable districts in India?')">🔴 Top 5 Vulnerable Districts</button>
+      <button class="ai-pill" onclick="sendQuickPrompt('Forecast the impact of a -30% monsoon drought shock')">🌧️ -30% Drought Shock</button>
+      <button class="ai-pill" onclick="sendQuickPrompt('Analyze vulnerability and drivers for Sitapur district')">📍 Sitapur District Deep-Dive</button>
+      <button class="ai-pill" onclick="sendQuickPrompt('What is the national contingency budget gap?')">💰 National Budget Gap</button>
+      <button class="ai-pill" onclick="sendQuickPrompt('Which ML model performed best and why?')">🏆 Best ML Model &amp; XAI</button>
+      <button class="ai-pill" onclick="sendQuickPrompt('Forecast unmet demand for Rajasthan through 2028')">🔮 Rajasthan 2028 Forecast</button>
+    </div>
+
+    <!-- Chat Messages Stream -->
+    <div class="ai-chat-messages" id="ai-chat-messages">
+      <div class="ai-msg ai-msg-bot">
+        <div class="ai-msg-avatar">🤖</div>
+        <div class="ai-msg-bubble">
+          <p><strong>Namaste! I am your NREGA Intelligence Copilot.</strong></p>
+          <p>I have real-time access to our <strong>745-district multi-pillar dataset</strong>, ML models (Gradient Boosting, Random Forest, Quantiles P05-P95), NFHS-5 literacy metrics, IMD climate data, and future outcome simulations through FY 2030.</p>
+          <p style="margin-top: 0.5rem;">Ask me anything, for example:</p>
+          <ul style="margin: 0.4rem 0 0.4rem 1.2rem; font-size: 0.85rem; line-height: 1.4;">
+            <li><em>"Analyze vulnerability for Sitapur, Patna, or Kalahandi"</em></li>
+            <li><em>"Forecast future outcomes if monsoon rainfall drops 30%"</em></li>
+            <li><em>"Which state requires the largest contingency fund?"</em></li>
+            <li><em>"Why did Gradient Boosting outperform Random Forest?"</em></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Box -->
+    <form class="ai-chat-input-bar" onsubmit="handleAIChatSubmit(event)">
+      <input type="text" id="ai-chat-input" placeholder="Ask about any district, future forecast, model, or policy..." autocomplete="off">
+      <button type="submit" class="ai-send-btn" id="ai-send-btn">
+        <span>Send</span>
+        <span style="font-size: 1rem;">➤</span>
+      </button>
+    </form>
+  </div>
+
+  <script src="app.js?v=20260926_2"></script>
+</body>
+</html>
