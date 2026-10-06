@@ -315,15 +315,15 @@ Open **`http://localhost:8000`** in your browser.
         <br /><b>Sanchi Katyal</b>
       </a>
       <br />
-      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Research & Documentation Specialist</span>
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(236,72,153,0.15); color:#f472b6; font-weight:600;">📄 Academic Research & Manuscript Specialist</span>
       <br />
       <a href="https://github.com/sanchi2559"><code>@sanchi2559</code></a>
       <br /><br />
       <div align="left" style="font-size:0.78rem; line-height:1.4;">
-        • Academic paper compilation & research manuscript editing<br/>
-        • Project synopsis preparation & thesis alignment<br/>
-        • Comprehensive project reporting and documentation<br/>
-        • Viva-voce guide contribution and content review
+        • Research paper manuscript drafting & scholarly structuring<br/>
+        • Project synopsis authoring & methodology alignment<br/>
+        • Comprehensive academic report compilation & synthesis<br/>
+        • Viva-voce guide development & editorial review
       </div>
     </td>
     <td align="center" width="25%" valign="top">
@@ -332,15 +332,15 @@ Open **`http://localhost:8000`** in your browser.
         <br /><b>Parv Sharma</b>
       </a>
       <br />
-      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Research & Documentation Specialist</span>
+      <span style="display:inline-block; margin-top:4px; font-size:0.78rem; padding:2px 8px; border-radius:12px; background:rgba(168,85,247,0.15); color:#c084fc; font-weight:600;">📝 Literature & Technical Documentation Specialist</span>
       <br />
       <a href="https://github.com/parvsharma1892007-ai"><code>@parvsharma1892007-ai</code></a>
       <br /><br />
       <div align="left" style="font-size:0.78rem; line-height:1.4;">
-        • Research paper manuscript drafting & literature review<br/>
-        • Project synopsis creation & academic report structuring<br/>
-        • Rural policy context & MGNREGA governance synthesis<br/>
-        • Technical documentation and academic formatting
+        • Research paper literature review & background benchmarking<br/>
+        • Project synopsis co-authoring & report structuring<br/>
+        • Rural labor policy context & governance synthesis<br/>
+        • Technical documentation formatting & appendix compilation
       </div>
     </td>
   </tr>
