@@ -1,6 +1,7 @@
 # 🌾 Explainable ML for District-Level Rural Employment Vulnerability & Unmet MGNREGA Demand Forecasting
 
 <p align="center">
+  <a href="https://explainablemlfordistrictlevelemp.netlify.app/" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Live Demo" /></a>
   <img src="https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Version" />
   <img src="https://img.shields.io/badge/Coverage-745%20Districts-success?style=for-the-badge&logo=googlemaps&logoColor=white" alt="Districts Covered" />
   <img src="https://img.shields.io/badge/States%20%26%20UTs-34-orange?style=for-the-badge" alt="States Covered" />
@@ -14,6 +15,7 @@
 </p>
 
 <p align="center">
+  <a href="https://explainablemlfordistrictlevelemp.netlify.app/" target="_blank"><b>🌐 Live Dashboard (Netlify)</b></a> •
   <a href="#-key-highlights--innovations">Key Highlights</a> •
   <a href="#-data-architecture--5-pillar-fusion">Data Fusion</a> •
   <a href="#-machine-learning-benchmarks">Model Benchmarks</a> •
@@ -22,6 +24,9 @@
   <a href="#-interactive-web-decision-support-system">Web Dashboard</a> •
   <a href="#-quickstart--reproduction">Quickstart</a>
 </p>
+
+> [!TIP]
+> 🌐 **Live Web Application**: Explore the interactive Decision-Support System with Leaflet maps, 90% quantile forecasting bands, and what-if policy simulators live at **[explainablemlfordistrictlevelemp.netlify.app](https://explainablemlfordistrictlevelemp.netlify.app/)**.
 
 ---
 
@@ -161,6 +166,10 @@ To test whether models trained in one agro-ecological zone can generalize to str
 ---
 
 ## 🗺️ Interactive Web Decision Support System
+
+> 🚀 **Live Production Deployment**: **[https://explainablemlfordistrictlevelemp.netlify.app/](https://explainablemlfordistrictlevelemp.netlify.app/)**
+>
+> *Hosted live on Netlify for seamless public access, real-time spatial exploration of all 745 districts, and instantaneous what-if policy simulations without needing local python setup.*
 
 The repository includes a production-ready, zero-dependency web dashboard located in [`web/`](./web):
 
